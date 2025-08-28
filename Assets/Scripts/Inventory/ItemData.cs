@@ -9,16 +9,15 @@ public enum ItemType
     //Misc,
 }
 [CreateAssetMenu(fileName = "New Item", menuName = "Inventory/Item")]
-public class ItemData
+public class ItemData : ScriptableObject
 {
-    public string Name;
-    public string Description;
-    public ItemType Type;
-    public float Value;
-    public Sprite Icon;
+    public string itemName;
+    public string description;
+    public ItemType type;
+    public float value;
+    public Sprite icon;
 
-    public bool IsEquippable;
-    public bool IsEquipped;
+    public bool isEquippable;
     //public bool isStackable;
     //public int stackSize;
     //public GameObject prefab;

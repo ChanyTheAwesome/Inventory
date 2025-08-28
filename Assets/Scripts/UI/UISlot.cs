@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class UISlot : MonoBehaviour
@@ -8,13 +10,25 @@ public class UISlot : MonoBehaviour
     [SerializeField] private Transform slotParent;
     [SerializeField] private int defaultSlotCount = 20;
     private int _slotCount;
-    [HideInInspector] public int AdditionalSlotCount { get; set; }
-    private List<Slot> _slots = new List<Slot>();
-    public int equippedWeaponIndex;
-    public int equippedArmorIndex;
-    public void Init() 
+    private readonly List<Slot> _slots = new List<Slot>();
+    public int equippedWeaponIndex = -1;
+    public int equippedArmorIndex = -1;
+
+    [SerializeField] private TextMeshProUGUI currentSlotCountText;
+    [SerializeField] private TextMeshProUGUI maxSlotCountText;
+
+    private void Start()
     {
-        _slotCount = defaultSlotCount + AdditionalSlotCount;
+        GameManager.Instance.Character.OnItemAdded += RefreshUI;
+    }
+
+    private void OnEnable()
+    {
+        RefreshUI();
+    }
+    public void Init()
+    {
+        _slotCount = GameManager.Instance.Character.MaxInventoryCount;
         CreateSlots();
         GameManager.Instance.Character.OnLevelUp += AddSlotOnLevelUp;
     }
@@ -25,14 +39,16 @@ public class UISlot : MonoBehaviour
         {
             CreateSlot();
         }
+        RefreshUI();
     }
 
     public void AddSlotOnLevelUp()
     {
-        for (int i = 0; i < 5; i++)
+        for (int i = _slots.Count; i < GameManager.Instance.Character.MaxInventoryCount; i++)
         {
             CreateSlot();
         }
+        RefreshUI();
     }
     
     private void CreateSlot()
@@ -43,5 +59,14 @@ public class UISlot : MonoBehaviour
         _slots.Add(slot);
         slot.Init(this, _slots.Count - 1);
     }
-    
+
+    public void RefreshUI()
+    {
+        foreach (Slot slot in _slots)
+        {
+            slot.SetUI();
+        }
+        currentSlotCountText.text = GameManager.Instance.Character.Inventory.Count.ToString();
+        maxSlotCountText.text = _slots.Count.ToString();
+    }
 }

@@ -18,9 +18,12 @@ public class Character
     public float FinalAttackDmg => AttackDmg + _additionalAttackDmg;
     public float FinalArmor => Armor + _additionalArmor;
     public event Action OnLevelUp;
+    public event Action OnItemAdded;
     [HideInInspector] public ItemData EquippedWeapon;
     [HideInInspector] public ItemData EquippedArmor;
     public List<ItemData> Inventory = new List<ItemData>();
+    public int MaxInventoryCount { get; private set; }
+
     public Character(int level, int exp, float attackDmg, float armor, float health, float criticalRate, int money)
     {
         Level = level;
@@ -30,46 +33,65 @@ public class Character
         Health = health;
         CriticalRate = criticalRate;
         Money = money;
+        MaxInventoryCount = 20;
+    }
+
+    public void AddItem(ItemData data)
+    {
+        if (Inventory.Count < MaxInventoryCount)
+        {
+            Inventory.Add(data);
+            OnItemAdded?.Invoke();
+        }
+    }
+    private int GetRequiredExp(int level)
+    {
+        return level * 3;
+    }
+    public void AddExp(int exp)
+    {
+        Exp += exp;
+        while (Exp >= GetRequiredExp(Level))
+        {
+            Exp -= GetRequiredExp(Level);
+            LevelUp();
+        }
     }
     public void LevelUp()
     {
         Level++;
-        Exp -= Level * 3;
         AttackDmg += 5;
         Armor += 3;
         Health += 100;
+        MaxInventoryCount += 5;
         
         OnLevelUp?.Invoke();
     }
 
     public void Equip(ItemData data)
     {
-        switch (data.Type)
+        switch (data.type)
         {
             case ItemType.Weapon:
                 EquippedWeapon = data;
-                EquippedWeapon.IsEquipped = true;
-                _additionalAttackDmg = data.Value;
+                _additionalAttackDmg = data.value;
                 break;
             case ItemType.Armor:
                 EquippedArmor = data;
-                EquippedArmor.IsEquipped = true;
-                _additionalArmor = data.Value;
+                _additionalArmor = data.value;
                 break;
         }
     }
 
     public void Disarm(ItemData data)
     {
-        switch (data.Type)
+        switch (data.type)
         {
             case ItemType.Weapon:
-                data.IsEquipped = false;
                 EquippedWeapon = null;
                 _additionalAttackDmg = 0;
                 break;
             case ItemType.Armor:
-                data.IsEquipped = false;
                 EquippedArmor = null;
                 _additionalArmor = 0;
                 break;
@@ -78,7 +100,7 @@ public class Character
 
     public void EquipNew(ItemData data)
     {
-        switch (data.Type)
+        switch (data.type)
         {
             case ItemType.Weapon:
                 Disarm(EquippedWeapon);

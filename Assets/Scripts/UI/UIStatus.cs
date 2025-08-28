@@ -15,14 +15,17 @@ public class UIStatus : MonoBehaviour
     private void Start()
     {
         backButton.onClick.AddListener(OnClickBack);
-        UpdateStatus(GameManager.Instance.Character);
     }
 
+    private void OnEnable()
+    {
+        UpdateStatus(GameManager.Instance.Character);
+    }
     private void UpdateStatus(Character character)
     {
         if (character == null) return;
-        attackText.text = $"{character.AttackDmg}";
-        armorText.text = $"{character.Armor}";
+        attackText.text = $"{character.FinalAttackDmg}";
+        armorText.text = $"{character.FinalArmor}";
         healthText.text = $"{character.Health}";
         criticalText.text = $"{character.CriticalRate}%";
     }
