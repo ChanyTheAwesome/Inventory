@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -23,11 +24,12 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        SetPlayer();
+        SetData();
+        UIManager.Instance.Init();
     }
 
-    private void SetPlayer()
+    private void SetData()
     {
-        Character = new Character(1, 0, 35, 40, 100, 25);
+        Character = new Character(1, 0, 35, 40, 100, 25, 20000);
     }
 }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public enum UIType
@@ -25,6 +26,7 @@ public class UIManager : MonoBehaviour
     public GameObject UIStatus => uiStatus;
     
     [SerializeField] private GameObject uiMainMenu;
+    [SerializeField] private GameObject uiDefault;
     public GameObject UIMainMenu => uiMainMenu;
     private void Awake()
     {
@@ -37,17 +39,12 @@ public class UIManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
         
     }
-
-    
-    private void Start()
-    {
-        Init();
-    }
-
-    private void Init()
+    public void Init()
     {
         SetUI(UIType.MainMenu);
         InitUIDict();
+        uiDefault.GetComponent<UIDefault>().Init();
+        uiInventory.GetComponent<UIInventory>().Init();
     }
     private void InitUIDict()
     {

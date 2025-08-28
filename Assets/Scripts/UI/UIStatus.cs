@@ -11,17 +11,16 @@ public class UIStatus : MonoBehaviour
     [SerializeField] private TextMeshProUGUI healthText;
     [SerializeField] private TextMeshProUGUI criticalText;
     [SerializeField] private Button backButton;
-    private Character character;
     
     private void Start()
     {
-        character = GameManager.Instance.Character;
         backButton.onClick.AddListener(OnClickBack);
-        UpdateStatus();
+        UpdateStatus(GameManager.Instance.Character);
     }
 
-    private void UpdateStatus()
+    private void UpdateStatus(Character character)
     {
+        if (character == null) return;
         attackText.text = $"{character.AttackDmg}";
         armorText.text = $"{character.Armor}";
         healthText.text = $"{character.Health}";
