@@ -12,10 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4637f0ca971cfd241b42d708bc911af2, type: 3}
   m_Name: Armor
   m_EditorClassIdentifier: 
-  itemName: "\uCE7C"
-  description: "\uCE7C\uC785\uB2C8\uB2E4"
-  type: 0
+  itemName: "\uAC11\uC637"
+  description: "\uAC11\uC637\uC785\uB2C8\uB2E4."
+  type: 1
   value: 3
-  icon: {fileID: 21300000, guid: 0b7e90001b5227b4b92c493abb67bc41, type: 3}
+  icon: {fileID: 21300000, guid: e9b79f04997cd334292bd11f60e088c9, type: 3}
   isEquippable: 1
-  isEquipped: 0
