@@ -28,6 +28,6 @@ public class GameManager : MonoBehaviour
 
     private void SetPlayer()
     {
-        Character = new Character(35, 40, 100, 25);
+        Character = new Character(1, 0, 35, 40, 100, 25);
     }
 }

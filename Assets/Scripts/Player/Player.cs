@@ -4,13 +4,17 @@ using UnityEngine;
 
 public class Character
 {
-    public float AttackDmg;
-    public float Armor;
-    public float Health;
-    public float CriticalRate;
+    public int Level { get; private set; }
+    public int Exp { get; private set; }
+    public float AttackDmg { get; private set; }
+    public float Armor { get; private set; }
+    public float Health { get; private set; }
+    public float CriticalRate { get; private set; }
 
-    public Character(float attackDmg, float armor, float health, float criticalRate)
+    public Character(int level, int exp, float attackDmg, float armor, float health, float criticalRate)
     {
+        Level = level;
+        Exp = exp;
         AttackDmg = attackDmg;
         Armor = armor;
         Health = health;
