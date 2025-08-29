@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UISlot : MonoBehaviour
 {
@@ -16,6 +17,7 @@ public class UISlot : MonoBehaviour
 
     [SerializeField] private TextMeshProUGUI currentSlotCountText;
     [SerializeField] private TextMeshProUGUI maxSlotCountText;
+    [SerializeField] private GridLayoutGroup content;
 
     private void Start()
     {
@@ -48,9 +50,18 @@ public class UISlot : MonoBehaviour
         {
             CreateSlot();
         }
+        IncreaseHeight(content.padding.bottom + content.cellSize.y);
         RefreshUI();
     }
-    
+
+    private void IncreaseHeight(float height)
+    {
+        RectTransform rt = content.GetComponent<RectTransform>();
+        float currentHeight = rt.rect.height;
+        float targetHeight = currentHeight + height;
+        rt.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, targetHeight);
+        LayoutRebuilder.ForceRebuildLayoutImmediate(rt);
+    }
     private void CreateSlot()
     {
         GameObject go = Instantiate(slotPrefab, slotParent);
