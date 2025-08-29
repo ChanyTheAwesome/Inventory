@@ -14,9 +14,13 @@ public class ItemButton : MonoBehaviour
     }
     private void OnClickButton()
     {
-        foreach (ItemData itemData in itemDatas)
+        if (GameManager.Instance.Character.TryPurchase(200) &&
+            GameManager.Instance.Character.Inventory.Count <= GameManager.Instance.Character.MaxInventoryCount + itemDatas.Length)
         {
-            GameManager.Instance.Character.AddItem(itemData);
+            foreach (ItemData itemData in itemDatas)
+            {
+                GameManager.Instance.Character.AddItem(itemData);
+            }
         }
     }
 }

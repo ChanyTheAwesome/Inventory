@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UIDefault : MonoBehaviour
+public class UIDefault : MonoBehaviour, IMoneyObserver
 {
     [SerializeField] private TextMeshProUGUI moneyText;
     [SerializeField] private TextMeshProUGUI levelText;
@@ -17,6 +17,12 @@ public class UIDefault : MonoBehaviour
         UpdateUI(GameManager.Instance.Character);
         giveExpButton.onClick.AddListener(AddOneExp);
         expImage.fillAmount = GameManager.Instance.Character.Exp / (float)GameManager.Instance.Character.Level * 3;
+        GameManager.Instance.Character.AddMoneyObserver(this);
+    }
+
+    public void OnMoneyChanged(int money)
+    {
+        moneyText.text = $"{money:N0}";
     }
     private void UpdateUI(Character character)
     {

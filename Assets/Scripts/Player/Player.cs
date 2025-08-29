@@ -22,6 +22,7 @@ public class Character
     [HideInInspector] public ItemData EquippedWeapon;
     [HideInInspector] public ItemData EquippedArmor;
     public List<ItemData> Inventory = new List<ItemData>();
+    private List<IMoneyObserver> _moneyObservers = new List<IMoneyObserver>();
     public int MaxInventoryCount { get; private set; }
 
     public Character(int level, int exp, float attackDmg, float armor, float health, float criticalRate, int money)
@@ -36,6 +37,17 @@ public class Character
         MaxInventoryCount = 20;
     }
 
+    public void AddMoneyObserver(IMoneyObserver observer)
+    {
+        if(!_moneyObservers.Contains(observer))
+            _moneyObservers.Add(observer);
+    }
+
+    public void RemoveObserver(IMoneyObserver observer)
+    {
+        if(_moneyObservers.Contains(observer))
+            _moneyObservers.Remove(observer);
+    }
     public void AddItem(ItemData data)
     {
         if (Inventory.Count < MaxInventoryCount)
@@ -43,6 +55,25 @@ public class Character
             Inventory.Add(data);
             OnItemAdded?.Invoke();
         }
+    }
+
+    private void NotifyMoneyObservers()
+    {
+        foreach (IMoneyObserver observer in _moneyObservers)
+        {
+            observer.OnMoneyChanged(Money);
+        }
+    }
+    public bool TryPurchase(int price)
+    {
+        if (price <= Money)
+        {
+            Money -= price;
+            NotifyMoneyObservers();
+            return true;
+        }
+
+        return false;
     }
     private int GetRequiredExp(int level)
     {
