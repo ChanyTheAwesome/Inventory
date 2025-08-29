@@ -50,7 +50,7 @@ public class UISlot : MonoBehaviour
         {
             CreateSlot();
         }
-        IncreaseHeight(content.padding.bottom + content.cellSize.y);
+        IncreaseHeight(content.spacing.y + content.cellSize.y);
         RefreshUI();
     }
 
