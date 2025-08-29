@@ -7,30 +7,30 @@ public class Character
 {
     public int Level { get; private set; }
     public int Exp { get; private set; }
-    public float AttackDmg { get; private set; }
-    public float Armor { get; private set; }
+    private float _attackDmg;
+    private float _armor;
     public float Health { get; private set; }
     public float CriticalRate { get; private set; }
     public int Money { get; private set; }
 
     private float _additionalAttackDmg;
     private float _additionalArmor;
-    public float FinalAttackDmg => AttackDmg + _additionalAttackDmg;
-    public float FinalArmor => Armor + _additionalArmor;
+    public float FinalAttackDmg => _attackDmg + _additionalAttackDmg;
+    public float FinalArmor => _armor + _additionalArmor;
     public event Action OnLevelUp;
     public event Action OnItemAdded;
     [HideInInspector] public ItemData EquippedWeapon;
     [HideInInspector] public ItemData EquippedArmor;
-    public List<ItemData> Inventory = new List<ItemData>();
-    private List<IMoneyObserver> _moneyObservers = new List<IMoneyObserver>();
+    public readonly List<ItemData> Inventory = new List<ItemData>();
+    private readonly List<IMoneyObserver> _moneyObservers = new List<IMoneyObserver>();
     public int MaxInventoryCount { get; private set; }
 
     public Character(int level, int exp, float attackDmg, float armor, float health, float criticalRate, int money)
     {
         Level = level;
         Exp = exp;
-        AttackDmg = attackDmg;
-        Armor = armor;
+        _attackDmg = attackDmg;
+        _armor = armor;
         Health = health;
         CriticalRate = criticalRate;
         Money = money;
@@ -39,46 +39,45 @@ public class Character
 
     public void AddMoneyObserver(IMoneyObserver observer)
     {
-        if(!_moneyObservers.Contains(observer))
+        if (!_moneyObservers.Contains(observer))
             _moneyObservers.Add(observer);
     }
 
     public void RemoveObserver(IMoneyObserver observer)
     {
-        if(_moneyObservers.Contains(observer))
+        if (_moneyObservers.Contains(observer))
             _moneyObservers.Remove(observer);
     }
+
     public void AddItem(ItemData data)
     {
-        if (Inventory.Count < MaxInventoryCount)
-        {
-            Inventory.Add(data);
-            OnItemAdded?.Invoke();
-        }
+        if (Inventory.Count >= MaxInventoryCount) return;
+        Inventory.Add(data);
+        OnItemAdded?.Invoke();
     }
 
     private void NotifyMoneyObservers()
     {
-        foreach (IMoneyObserver observer in _moneyObservers)
+        foreach (var observer in _moneyObservers)
         {
             observer.OnMoneyChanged(Money);
         }
     }
+
     public bool TryPurchase(int price)
     {
-        if (price <= Money)
-        {
-            Money -= price;
-            NotifyMoneyObservers();
-            return true;
-        }
+        if (price > Money) return false;
 
-        return false;
+        Money -= price;
+        NotifyMoneyObservers();
+        return true;
     }
-    private int GetRequiredExp(int level)
+
+    private static int GetRequiredExp(int level)
     {
         return level * 3;
     }
+
     public void AddExp(int exp)
     {
         Exp += exp;
@@ -88,14 +87,15 @@ public class Character
             LevelUp();
         }
     }
-    public void LevelUp()
+
+    private void LevelUp()
     {
         Level++;
-        AttackDmg += 5;
-        Armor += 3;
+        _attackDmg += 5;
+        _armor += 3;
         Health += 100;
         MaxInventoryCount += 5;
-        
+
         OnLevelUp?.Invoke();
     }
 
@@ -110,6 +110,9 @@ public class Character
             case ItemType.Armor:
                 EquippedArmor = data;
                 _additionalArmor = data.value;
+                break;
+            default:
+                Debug.LogError("Wrong item type");
                 break;
         }
     }
@@ -126,6 +129,9 @@ public class Character
                 EquippedArmor = null;
                 _additionalArmor = 0;
                 break;
+            default:
+                Debug.LogError("Wrong item type");
+                break;
         }
     }
 
@@ -140,6 +146,9 @@ public class Character
             case ItemType.Armor:
                 Disarm(EquippedArmor);
                 Equip(data);
+                break;
+            default:
+                Debug.LogError("Wrong item type");
                 break;
         }
     }

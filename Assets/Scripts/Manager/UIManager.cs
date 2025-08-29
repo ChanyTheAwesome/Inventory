@@ -13,8 +13,7 @@ public enum UIType
 public class UIManager : MonoBehaviour
 {
     private static UIManager _instance;
-    [HideInInspector]
-    public static UIManager Instance => _instance;
+    [HideInInspector] public static UIManager Instance => _instance;
     
     [HideInInspector] public UIType currentUIType;
     private readonly Dictionary<UIType, GameObject> _uiDict = new();
@@ -61,9 +60,9 @@ public class UIManager : MonoBehaviour
 
     private void ChangeUI(UIType type)
     {
-        foreach (var UI in _uiDict)
+        foreach (var ui in _uiDict)
         {
-            UI.Value.SetActive(UI.Key == type);
+            ui.Value.SetActive(ui.Key == type);
         }
     }
 }

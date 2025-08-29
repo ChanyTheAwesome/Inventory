@@ -14,12 +14,12 @@ public class UIMainMenu : MonoBehaviour
         inventoryButton.onClick.AddListener(OnClickInventory);
     }
 
-    public void OnClickStatus()
+    private static void OnClickStatus()
     {
         UIManager.Instance.SetUI(UIType.Status);
     }
     
-    public void OnClickInventory()
+    private static void OnClickInventory()
     {
         UIManager.Instance.SetUI(UIType.Inventory);
     }

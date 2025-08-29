@@ -30,7 +30,7 @@ public class UIStatus : MonoBehaviour
         criticalText.text = $"{character.CriticalRate}%";
     }
 
-    private void OnClickBack()
+    private static void OnClickBack()
     {
         UIManager.Instance.SetUI(UIType.MainMenu);
     }

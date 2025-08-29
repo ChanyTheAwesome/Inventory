@@ -4,24 +4,21 @@ using UnityEngine;
 
 public class BackgroundMove : MonoBehaviour
 {
-    private bool isMovingRight = true;
+    private bool _isMovingRight = true;
     private void Update()
     {
-        if(isMovingRight == true)
+        this.transform.position = _isMovingRight ? new Vector3(this.transform.position.x+0.0002f, this.transform.position.y, this.transform.position.z) : 
+            new Vector3(this.transform.position.x - 0.0002f, this.transform.position.y, this.transform.position.z);
+        switch (this.transform.position.x)
         {
-            this.transform.position = new Vector3(this.transform.position.x+0.0002f, this.transform.position.y, this.transform.position.z);
-        }
-        else
-        {
-            this.transform.position = new Vector3(this.transform.position.x - 0.0002f, this.transform.position.y, this.transform.position.z);
-        }
-        if (this.transform.position.x >= 2.5f)
-        {
-            isMovingRight = false;
-        }
-        else if (this.transform.position.x <= -2.5f)
-        {
-            isMovingRight = true;
+            case >= 2.5f:
+                _isMovingRight = false;
+                break;
+            case <= -2.5f:
+                _isMovingRight = true;
+                break;
+            default:
+                break;
         }
     }
 }

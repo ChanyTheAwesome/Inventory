@@ -95,6 +95,9 @@ public class Slot : MonoBehaviour
                             GameManager.Instance.Character.Equip(itemData);
                         }
                         break;
+                    default:
+                        Debug.LogError("Wrong item type");
+                        break;
                 }
             }
         }
