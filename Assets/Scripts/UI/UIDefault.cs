@@ -17,12 +17,13 @@ public class UIDefault : MonoBehaviour, IMoneyObserver
         UpdateUI(GameManager.Instance.Character);
         giveExpButton.onClick.AddListener(AddOneExp);
         expImage.fillAmount = GameManager.Instance.Character.Exp / (float)GameManager.Instance.Character.Level * 3;
-        GameManager.Instance.Character.AddMoneyObserver(this);
+        GameManager.Instance.Character.AddMoneyObserver(this);//옵저버를 달아줬습니다!
     }
 
     public void OnMoneyChanged(int money)
     {
-        moneyText.text = $"{money:N0}";
+        moneyText.text = $"{money:N0}";//보유 금액이 바뀔 때 마다 텍스트를 변경해줍니다!
+        //이런 구조를 다른 곳에도 적용시키면 참 좋겠지만, 시간이 없었어요 ㅠㅠ
     }
     private void UpdateUI(Character character)
     {

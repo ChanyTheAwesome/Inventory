@@ -70,16 +70,16 @@ public class Slot : MonoBehaviour
             else
             {
                 switch (itemData.type)
-                {
+                {//장착되지 않은 아이템이라면 장착을 수행합니다.
                     case ItemType.Weapon:
                         _uiSlot.equippedWeaponIndex = index;
                         if (GameManager.Instance.Character.EquippedWeapon != null)
                         {
-                            GameManager.Instance.Character.EquipNew(itemData);
+                            GameManager.Instance.Character.EquipNew(itemData);//장착된 장비가 있다면 새로운 장비 장착 메서드로 넘어가고
                         }
                         else
                         {
-                            GameManager.Instance.Character.Equip(itemData);
+                            GameManager.Instance.Character.Equip(itemData);//아니라면 그냥 장착합니다.
                         }
                         break;
                     case ItemType.Armor:
