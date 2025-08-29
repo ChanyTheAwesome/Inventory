@@ -14,12 +14,13 @@ public class ItemButton : MonoBehaviour
     }
     private void OnClickButton()
     {
-        if (GameManager.Instance.Character.TryPurchase(200) &&
-            GameManager.Instance.Character.Inventory.Count <= GameManager.Instance.Character.MaxInventoryCount + itemDatas.Length)
+        Character character = GameManager.Instance.Character;
+        bool hasSpace = character.Inventory.Count + itemDatas.Length <= character.MaxInventoryCount;
+        if (hasSpace && character.TryPurchase(200))
         {
             foreach (ItemData itemData in itemDatas)
             {
-                GameManager.Instance.Character.AddItem(itemData);
+                character.AddItem(itemData);
             }
         }
     }
